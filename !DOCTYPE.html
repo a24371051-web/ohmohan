@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Travel Diary - 여행의 기억</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #2a1a4e 50%, #1a3a3a 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* 네비게이션 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            background: rgba(15, 15, 30, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        nav h1 {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #87ceeb, #dda0dd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(15, 15, 30, 0.3), rgba(42, 26, 78, 0.5));
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(221, 160, 221, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(135, 206, 235, 0.1) 0%, transparent 50%);
+            animation: drift 20s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 2s ease-out;
+        }
+
+        .hero h2 {
+            font-size: 72px;
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            color: #dda0dd;
+            text-shadow: 0 0 30px rgba(221, 160, 221, 0.3);
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: #87ceeb;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 여행 카드 섹션 */
+        .travel-section {
+            padding: 100px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 80px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #87ceeb, #dda0dd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 100px;
+        }
+
+        .travel-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(221, 160, 221, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .travel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(221, 160, 221, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .travel-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(135, 206, 235, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(135, 206, 235, 0.1);
+        }
+
+        .travel-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #2a1a4e, #1a3a3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .card-content {
+            padding: 35px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .card-content h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 400;
+            color: #dda0dd;
+        }
+
+        .card-content .country {
+            font-size: 14px;
+            color: #87ceeb;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .card-content p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #b0b0b0;
+            font-weight: 300;
+        }
+
+        .card-date {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #8a7a9e;
+            letter-spacing: 1px;
+        }
+
+        /* 갤러리 섹션 */
+        .gallery-section {
+            padding: 100px 40px;
+            background: linear-gradient(135deg, rgba(42, 26, 78, 0.3) 0%, rgba(26, 58, 58, 0.3) 100%);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #2a1a4e, #1a3a3a);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(221, 160, 221, 0.1);
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(135, 206, 235, 0.3);
+            box-shadow: 0 10px 40px rgba(135, 206, 235, 0.1);
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* 푸터 */
+        footer {
+            padding: 50px 40px;
+            text-align: center;
+            background: rgba(15, 15, 30, 0.8);
+            border-top: 1px solid rgba(221, 160, 221, 0.1);
+            font-size: 14px;
+            color: #8a7a9e;
+            letter-spacing: 2px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            nav h1 {
+                font-size: 20px;
+            }
+
+            .hero h2 {
+                font-size: 48px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 36px;
+                margin-bottom: 50px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .travel-section {
+                padding: 60px 20px;
+            }
+
+            .card-content {
+                padding: 25px;
+            }
+        }
+
+        /* 스크롤 애니메이션 */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: revealOnScroll 0.8s ease-out forwards;
+        }
+
+        @keyframes revealOnScroll {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 -->
+    <nav>
+        <h1>✨ MY TRAVEL DIARY</h1>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>wandering soul</h2>
+            <p>세상의 아름다운 순간들을 기록하다</p>
+        </div>
+    </section>
+
+    <!-- 여행 카드 섹션 -->
+    <section class="travel-section">
+        <h2 class="section-title">여행의 기억들</h2>
+        <div class="cards-grid">
+            <!-- 카드 1 -->
+            <div class="travel-card scroll-reveal">
+                <div class="card-image">🏔️</div>
+                <div class="card-content">
+                    <div class="country">스위스 · 융프라우</div>
+                    <h3>구름 위의 세상</h3>
+                    <p>알프스의 설산을 헤치며 올라간 그 순간, 세상이 하얀 안개로 물드는 경험. 자연의 웅장함 앞에서 모든 것이 작아져 보였다.</p>
+                    <div class="card-date">2024년 1월</div>
+                </div>
+            </div>
+
+            <!-- 카드 2 -->
+            <div class="travel-card scroll-reveal">
+                <div class="card-image">🌴</div>
+                <div class="card-content">
+                    <div class="country">인도네시아 · 발리</div>
+                    <h3>영혼의 섬</h3>
+                    <p>황금빛 논밭을 거니르며 만난 현지인의 미소. 사원의 향연과 샘물이 흐르는 정글 속에서 마음이 깊어지는 경험을 했다.</p>
+                    <div class="card-date">2023년 11월</div>
+                </div>
+            </div>
+
+            <!-- 카드 3 -->
+            <div class="travel-card scroll-reveal">
+                <div class="card-image">🌊</div>
+                <div class="card-content">
+                    <div class="country">뉴질랜드 · 밀포드 사운드</div>
+                    <h3>신비로운 협곡</h3>
+                    <p>수직의 절벽과 쏟아지는 폭포, 그리고 깊은 피요르드. 자연이 그린 유화 같은 풍경에 숨이 멎었다.</p>
+                    <div class="card-date">2023년 8월</div>
+                </div>
+            </div>
+
+            <!-- 카드 4 -->
+            <div class="travel-card scroll-reveal">
+                <div class="card-image">🏜️</div>
+                <div class="card-content">
+                    <div class="country">아이슬란드 · 골든써클</div>
+                    <h3>극지의 경이</h3>
+                    <p>하얀 얼음과 검은 화산암이 만드는 낯선 풍경. 지구의 원시적인 아름다움을 처음 느낀 순간이었다.</p>
+                    <div class="card-date">2023년 6월</div>
+                </div>
+            </div>
+
+            <!-- 카드 5 -->
+            <div class="travel-card scroll-reveal">
+                <div class="card-image">🎋</div>
+                <div class="card-content">
+                    <div class="country">일본 · 교토</div>
+                    <h3>옛 기억의 도시</h3>
+                    <p>대나무 숲을 거니며 부는 바람 소리, 고요한 사찰의 정원. 시간이 멈춘 듯한 고요함 속에 영혼이 쉬었다.</p>
+                    <div class="card-date">2023년 3월</div>
+                </div>
+            </div>
+
+            <!-- 카드 6 -->
+            <div class="travel-card scroll-reveal">
+                <div class="card-image">🌺</div>
+                <div class="card-content">
+                    <div class="country">태국 · 치
